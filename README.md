@@ -2,6 +2,8 @@
 A movie website
 
 #数据库设计
+
+
 Movie
 (Mid,Mname,Myear,Mdate,Mbrief,
 Mdirector,Mwriter1,Mwriter2,Mwriter3,Mstar1,Mstar2, Mstar3, Mstar4, Mstar5,

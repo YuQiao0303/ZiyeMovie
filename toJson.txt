@@ -1,0 +1,107 @@
+import java.io.File;  
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.TreeMap;
+import java.io.BufferedReader;  
+import java.io.BufferedWriter;  
+import java.io.FileInputStream;  
+import java.io.FileWriter; 
+import java.io.IOException;
+
+
+
+public class MySplitWords {
+
+	public static String getJsonString(String inputFile)
+	{
+		String finalJson="[";
+		try 
+		{ // 防止文件建立或读取失败，用catch捕捉错误并打印，也可以throw  
+    		File filename = new File(inputFile); // 要读取该路径的文件  
+            InputStreamReader reader = new InputStreamReader(  
+                    new FileInputStream(filename)); // 建立一个输入流对象reader  
+            BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言  
+            String line;  
+            
+            long count = 1;
+            
+            line = br.readLine(); 
+            while (line != null) 
+            {  
+            	/*________modify here _________*/
+            	String reg1 = "\\s+|,+";   //用空格、tab或逗号来分割单词 
+            	String str[] = line.split(reg1); 
+             	/*
+            	 * uid
+            	 * mid
+            	 * rating
+            	 * rating
+            	 *   */
+           
+            	//Rid
+            	finalJson += "\n\t{";
+            	finalJson += "\n\t\t\"Rid\":";
+            	finalJson += Long.toString(count);
+            	count++;
+           
+            	//Uid
+            	finalJson += ",\n\t";
+            	finalJson += "\n\t\t\"Uid\":";
+            	finalJson += str[0];
+            	//Mid
+            	finalJson += ",\n\t";
+            	finalJson += "\n\t\t\"Mid\":";
+            	finalJson += str[1];
+            	//Rating
+            	finalJson += ",\n\t";
+            	finalJson += "\n\t\t\"Rating\":";
+            	finalJson += str[2];
+            	
+            	finalJson +="\n\t},";
+            	
+            	System.out.println(count);
+            	//-----------------------------------------------------------------
+                line = br.readLine(); // 读取下一行数据  
+            } 
+            
+            br.close();
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}     	
+		finalJson = finalJson.substring(0,finalJson.length() - 1);//remove the last ","
+		finalJson += "\n]";
+		return finalJson;
+	}
+	
+	public static void output(String outputFile,String jsonString)
+	{
+		try 
+		{
+			
+	        File writename = new File(outputFile); // 如果没有则要建立一个新的output。txt文件  
+	        writename.createNewFile(); // 创建新文件  
+	        BufferedWriter out = new BufferedWriter(new FileWriter(writename));  
+	        out.write(jsonString); // \r\n即为换行  
+	        out.flush(); // 把缓存区内容压入文件  
+	        out.close(); // 最后记得关闭文件  
+			//System.out.println("already written the output.txt"); 
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args){
+		
+		String inputFile ="D:\\study\\大三下\\专业实训\\ml-100k\\u.data";
+		String outputFile="D:\\Rating.json";
+		String jsonString = getJsonString(inputFile);
+		output(outputFile,jsonString);
+		System.out.println("finished");
+		
+    }
+	
+}
